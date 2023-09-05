@@ -19,6 +19,10 @@ const postData = async(req, res) => {
 
         console.log(data);
 
+        res.json({
+            ok: true
+        })
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -40,6 +44,11 @@ const postDataParams = async(req, res) => {
 
         console.log(data);
         console.log(datos);
+
+        res.json({
+            ok: true
+        })
+
 
     } catch (error) {
         console.log(error);

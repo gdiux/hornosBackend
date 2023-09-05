@@ -23,7 +23,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 5000
 app.use(express.static('public'));
 
 // RUTAS
-app.use('/api/data', require('./routes/data.routes'));
+app.use('/data', require('./routes/data.routes'));
 
 // SPA
 app.get('*', (req, res) => {

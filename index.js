@@ -20,6 +20,8 @@ server.on('connection', (socket) => {
                 "temperatura": datos[1]
             }
 
+            console.log(body);
+
             const response = await fetch(process.env.URL, {
                 method: 'post',
                 body: JSON.stringify(body),

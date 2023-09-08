@@ -1,35 +1,51 @@
-//Env
 require('dotenv').config();
-const path = require('path');
+const net = require('net');
 
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+const fetch = (...args) =>
+    import ('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-// Crear el servidor express
-const app = express();
+const server = net.createServer();
 
-// CORS
-app.use(cors());
+server.on('connection', (socket) => {
+    socket.on('data',async (data) => {
 
-//app.use(express.bodyParser({ limit: '50mb' }));
-// READ BODY
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
+        //console.log('Data: '+ data);
 
+        let datos= data.toString().split('_');
 
+        if (datos[1]) {
 
-// DIRECTORIO PUBLICO
-app.use(express.static('public'));
+            let body = {
+                "code": datos[0],
+                "temperatura": datos[1]
+            }
 
-// RUTAS
-app.use('/data', require('./routes/data.routes'));
+            const response = await fetch(process.env.URL, {
+                method: 'post',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
-// SPA
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'public/index.html'));
-});
+            
+            let resp = await response.json();
 
-app.listen(process.env.PORT, () => {
-    console.log('Servidor Corriendo en el Puerto', process.env.PORT);
-});
+            if (!resp.ok) {
+                console.log(`${resp.msg} codigo: ${body.code} temperatura: ${body.temperatura}`);
+            }else{
+                console.log(resp.msg);
+            }
+
+        }       
+
+    });
+
+    socket.on('error', (err) =>{
+        console.log(err);
+    })
+})
+
+server.listen(process.env.PORT, ()=>{
+    console.log('Servidor corriendo en el puerto ', process.env.PORT);
+})

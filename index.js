@@ -9,8 +9,6 @@ const server = net.createServer();
 server.on('connection', (socket) => {
     socket.on('data',async (data) => {
 
-        //console.log('Data: '+ data);
-
         let datos= data.toString().split('_');
 
         if (datos[1]) {
@@ -20,24 +18,28 @@ server.on('connection', (socket) => {
                 "temperatura": datos[1]
             }
 
-            console.log(body);
+            setTimeout( async () =>{
 
-            const response = await fetch(process.env.URL, {
-                method: 'post',
-                body: JSON.stringify(body),
-                headers: {
-                    'Content-Type': 'application/json',
+                console.log(body);
+    
+                const response = await fetch(process.env.URL, {
+                    method: 'post',
+                    body: JSON.stringify(body),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });    
+                
+                let resp = await response.json();
+    
+                if (!resp.ok) {
+                    console.log(`${resp.msg} codigo: ${body.code} temperatura: ${body.temperatura}`);
+                }else{
+                    console.log(resp.msg);
                 }
-            });
 
-            
-            let resp = await response.json();
+            }, 30000)
 
-            if (!resp.ok) {
-                console.log(`${resp.msg} codigo: ${body.code} temperatura: ${body.temperatura}`);
-            }else{
-                console.log(resp.msg);
-            }
 
         }       
 

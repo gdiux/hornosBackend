@@ -21,28 +21,23 @@ server.on('connection', (socket) => {
                 "fecha": new Date()
             }
 
-            setTimeout( async () =>{
+            console.log(body);
 
-                console.log(body);
-    
-                const response = await fetch(process.env.URL, {
-                    method: 'post',
-                    body: JSON.stringify(body),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });    
-                
-                let resp = await response.json();
-    
-                if (!resp.ok) {
-                    console.log(`${resp.msg} codigo: ${body.code} temperatura: ${body.temperatura}`);
-                }else{
-                    console.log(resp.msg);
+            const response = await fetch(process.env.URL, {
+                method: 'post',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json',
                 }
+            });    
+            
+            let resp = await response.json();
 
-            }, 30000)
-
+            if (!resp.ok) {
+                console.log(`${resp.msg} codigo: ${body.code} temperatura: ${body.temperatura}`);
+            }else{
+                console.log(resp.msg);
+            }
 
         }       
 

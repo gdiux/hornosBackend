@@ -13,10 +13,12 @@ server.on('connection', (socket) => {
 
         if (datos[1]) {
 
+            let date = new Date().getTime().toLocaleString();
+
             let body = {
                 "code": datos[0],
                 "temperatura": datos[1],
-                "fecha": new Date().toLocaleDateString()
+                "fecha": new Date(date)
             }
 
             setTimeout( async () =>{

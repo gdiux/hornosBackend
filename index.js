@@ -15,7 +15,8 @@ server.on('connection', (socket) => {
 
             let body = {
                 "code": datos[0],
-                "temperatura": datos[1]
+                "temperatura": datos[1],
+                "fecha": new Date()
             }
 
             setTimeout( async () =>{
